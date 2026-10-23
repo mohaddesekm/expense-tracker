@@ -1,115 +1,88 @@
 import './App.css';
-import SummaryCard from './components/SummaryCard';
-import TransactionForm from './features/transactions/TransactionForm';
-import TransactionList from './features/transactions/TransactionList';
-import { transactions } from './features/transactions/transactionData';
-import {
-    calculateIncome,
-    calculateExpenses,
-    calculateBalance,
-} from './utils/transactions';
-import type { NewTransaction, Transaction } from './types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Link, Route, Routes } from 'react-router';
+
+import SideMenu from './components/SideMenu';
+
+import DashboardPage from './pages/DashboardPage';
+import TransactionsPage from './pages/TransactionsPage';
+import CategoriesPage from './pages/CategoriesPage';
+import ReportsPage from './pages/ReportsPage';
+import SettingsPage from './pages/SettingsPage';
+import { Menu } from 'lucide-react';
 
 export default function App() {
-    const [isFormOpen, setIsFormOpen] = useState(false);
-    const [transactionList, setTransactionList] =
-        useState<Transaction[]>(transactions);
+    const [isMobileOpen, setIsMobileOpen] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(() => {
+        const savedCollapsed = localStorage.getItem('sidebarCollapsed');
 
-    const balance = calculateBalance(transactionList);
-    const income = calculateIncome(transactionList);
-    const expenses = calculateExpenses(transactionList);
+        return savedCollapsed === 'true';
+    });
 
-    function handleAddTransaction(newTransaction: NewTransaction) {
-        const transaction: Transaction = {
-            ...newTransaction,
-            id: crypto.randomUUID(),
-        };
-
-        setTransactionList((currentTransactions) => [
-            transaction,
-            ...currentTransactions,
-        ]);
-
-        setIsFormOpen(false);
-    }
+    useEffect(() => {
+        localStorage.setItem(
+            'sidebarCollapsed',
+            isCollapsed ? 'true' : 'false',
+        );
+    }, [isCollapsed]);
 
     return (
-        <main className="min-h-screen bg-slate-50 p-6">
-            <div className="mx-auto max-w-7xl">
-                <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
-                    <div>
-                        <p className="text-sm text-slate-500">
-                            Personal Finance
-                        </p>
-                        <h1 className="mt-1 text-3xl font-bold text-slate-900">
-                            Financial Dashboard
-                        </h1>
-                        <p className="mt-2 text-slate-600">
-                            Track your income, expenses, and balance.
-                        </p>
-                    </div>
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 md:flex">
+            <SideMenu
+                isCollapsed={isCollapsed}
+                onToggleCollapse={() => setIsCollapsed((prev) => !prev)}
+                isMobileOpen={isMobileOpen}
+                onCloseMobile={() => setIsMobileOpen(false)}
+            />
 
+            <div className="min-w-0 flex-1">
+                {/* Mobile header */}
+                <header className="flex items-center border-b border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:hidden">
                     <button
                         type="button"
-                        onClick={() => setIsFormOpen(true)}
-                        className="rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white shadow-sm transition duration-300 hover:bg-blue-700 cursor-pointer"
+                        aria-label="Open navigation menu"
+                        onClick={() => setIsMobileOpen(true)}
+                        className="rounded-lg px-2.5 py-2 text-slate-700 transition duration-300 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800 cursor-pointer"
                     >
-                        + Add Transaction
+                        <Menu />
                     </button>
+                    <span className="ml-3 font-semibold text-slate-900 dark:text-white">
+                        Pennywise
+                    </span>
                 </header>
 
-                <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    <SummaryCard title="Total Income" amount={income} type="income" />
-
-                    <SummaryCard
-                        title="Total Balance"
-                        amount={balance}
-                        type="balance"
+                {/* Page content */}
+                <Routes>
+                    <Route path="/" element={<DashboardPage />} />
+                    <Route
+                        path="/transactions"
+                        element={<TransactionsPage />}
                     />
+                    <Route path="/categories" element={<CategoriesPage />} />
+                    <Route path="/reports" element={<ReportsPage />} />
+                    <Route path="/settings" element={<SettingsPage />} />
+                    <Route
+                        path="*"
+                        element={
+                            <main className="p-6 text-slate-900 dark:text-white flex flex-col items-center">
+                                <h1 className="text-2xl font-bold">
+                                    404 - Page Not Found
+                                </h1>
+                                <p className="mt-2 mb-18 text-slate-500 dark:text-slate-400">
+                                    The page you are looking for does not exist.
+                                </p>
 
-                    <SummaryCard
-                        title="Total Expenses"
-                        amount={expenses}
-                        type="expenses"
-                    />
-                </section>
-                <TransactionList transactions={transactionList} />
-
-                <div
-                    aria-hidden={!isFormOpen}
-                    className={`fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4 backdrop-blur-sm transition-opacity duration-300 ${
-                        isFormOpen
-                            ? 'visible opacity-100 '
-                            : 'invisible opacity-0 '
-                    }`}
-                    onMouseDown={(event) => {
-                        if (event.target === event.currentTarget) {
-                            setIsFormOpen(false);
+                                <Link
+                                    to="/"
+                                    className="w-40 text-center cursor-pointer rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white shadow-sm transition duration-300 hover:bg-blue-700"
+                                >
+                                    Dashboard
+                                </Link>
+                            </main>
                         }
-                    }}
-                >
-                    <div
-                        className={`relative w-full max-w-xl transform transition-all duration-300 ease-out ${
-                            isFormOpen
-                                ? 'translate-y-0 scale-100'
-                                : 'translate-y-4 scale-95'
-                        }`}
-                    >
-                        <button
-                            type="button"
-                            onClick={() => setIsFormOpen(false)}
-                            aria-label="Close form"
-                            tabIndex={isFormOpen ? 0 : -1}
-                            className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white text-xl text-slate-600 shadow hover:bg-slate-100"
-                        >
-                            ×
-                        </button>
-
-                        <TransactionForm onAdd={handleAddTransaction} isOpen={isFormOpen} />
-                    </div>
-                </div>
+                    />
+                </Routes>
             </div>
-        </main>
+        </div>
     );
 }
