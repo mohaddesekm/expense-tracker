@@ -1,75 +1,78 @@
-# React + TypeScript + Vite
+# Pennywise 💰
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A personal finance tracker built with React, TypeScript, and Tailwind CSS.
 
-Currently, two official plugins are available:
+Pennywise helps users manage their personal finances by tracking income and expenses, organizing transactions, and monitoring their overall balance.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ Features
 
-## React Compiler
+- **Dashboard:** View total income, expenses, and balance.
+- **Transaction Management:** Add, edit, and delete transactions.
+- **Categories:** Organize transactions into different categories.
+- **Bilingual Support:** Switch between English and Persian.
+- **RTL & LTR Support:** Automatically adjust layout direction based on the selected language.
+- **Dark & Light Mode:** Switch between themes.
+- **Local Storage:** Persist transactions and user preferences in the browser.
+- **Responsive Design:** Optimized for desktop and mobile screens.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Router
+- i18next
+- react-i18next
+- Lucide React
+- pnpm
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Prerequisites
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Make sure you have Node.js and pnpm installed.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Installation
 
-```
+1. Clone the repository:
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+   ```bash
+   git clone https://github.com/mohaddesekm/expense-tracker.git
+   ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+2. Navigate to the project directory:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+   ```bash
+   cd expense-tracker
+   ```
 
-```
+3. Install dependencies:
+
+   ```bash
+   pnpm install
+   ```
+
+4. Start the development server:
+
+   ```bash
+   pnpm dev
+   ```
+
+5. Open the local URL shown in your terminal.
+
+
+## 🌍 Languages
+
+- English (LTR)
+- Persian / فارسی (RTL)
+
+## 💾 Data Storage
+
+Currently, Pennywise uses the browser's `localStorage` to save transactions and user preferences.
+
+No backend or cloud database is currently required.
+
+## 📌 Project Status
+
+Pennywise is an ongoing project. New features and improvements will be added over time.
