@@ -1,15 +1,23 @@
 import { useEffect, useState, useRef } from 'react';
-import type { NewTransaction, TransactionCategory } from '../../types';
+import type {
+    NewTransaction,
+    Transaction,
+    TransactionCategory,
+} from '../../types';
 import { useTranslation } from 'react-i18next';
 
 type TransactionFormProps = {
     onAdd: (transaction: NewTransaction) => void;
     isOpen: boolean;
+    editingTransaction: Transaction | null;
+    onUpdate: (transaction: Transaction) => void;
 };
 
 export default function TransactionForm({
     onAdd,
     isOpen,
+    editingTransaction,
+    onUpdate,
 }: TransactionFormProps) {
     const { t } = useTranslation();
     const [title, setTitle] = useState('');
@@ -29,6 +37,22 @@ export default function TransactionForm({
         return () => window.clearTimeout(timeoutId);
     }, [isOpen]);
 
+    useEffect(() => {
+        if (editingTransaction) {
+            setTitle(editingTransaction.title);
+            setAmount(editingTransaction.amount);
+            setType(editingTransaction.type);
+            setDate(editingTransaction.date);
+            setCategory(editingTransaction.category);
+        } else {
+            setTitle('');
+            setAmount(0);
+            setType('expense');
+            setDate('');
+            setCategory('other');
+        }
+    }, [editingTransaction]);
+
     function handleTypeChange(newType: 'income' | 'expense') {
         setType(newType);
         setCategory(newType === 'income' ? 'salary' : 'other');
@@ -41,13 +65,24 @@ export default function TransactionForm({
             return;
         }
 
-        onAdd({
-            title: title.trim(),
-            amount,
-            type,
-            date,
-            category,
-        });
+        if (editingTransaction) {
+            onUpdate({
+                ...editingTransaction,
+                title,
+                amount,
+                type,
+                date,
+                category,
+            });
+        } else {
+            onAdd({
+                title: title.trim(),
+                amount,
+                type,
+                date,
+                category,
+            });
+        }
 
         setTitle('');
         setAmount(0);

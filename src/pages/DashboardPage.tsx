@@ -39,6 +39,9 @@ export default function DashboardPage() {
         },
     );
 
+    const [editingTransaction, setEditingTransaction] =
+        useState<Transaction | null>(null);
+
     const balance = calculateBalance(transactionList);
     const income = calculateIncome(transactionList);
     const expenses = calculateExpenses(transactionList);
@@ -58,15 +61,27 @@ export default function DashboardPage() {
     }
 
     function handleDeleteTransaction(id: string) {
-        console.log('deleteiiiiiiiing');
-
         setTransactionList((prev) =>
             prev.filter((transaction) => transaction.id !== id),
         );
     }
 
-    function handleEditTransaction() {
-        //
+    function handleEditTransaction(transaction: Transaction) {
+        setEditingTransaction(transaction);
+        setIsFormOpen(true);
+    }
+
+    function handleUpdateTransaction(updatedTransaction: Transaction) {
+        setTransactionList((prev) =>
+            prev.map((transaction) => {
+                if (transaction.id === updatedTransaction.id) {
+                    return { ...transaction, ...updatedTransaction };
+                }
+                return transaction;
+            }),
+        );
+        setIsFormOpen(false);
+        setEditingTransaction(null);
     }
 
     useEffect(() => {
@@ -163,6 +178,8 @@ export default function DashboardPage() {
                         <TransactionForm
                             onAdd={handleAddTransaction}
                             isOpen={isFormOpen}
+                            onUpdate={handleUpdateTransaction}
+                            editingTransaction={editingTransaction}
                         />
                     </div>
                 </div>
