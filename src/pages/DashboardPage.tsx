@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import SummaryCard from '../components/SummaryCard';
 import type { Transaction, NewTransaction } from '../types';
 import {
@@ -10,6 +11,7 @@ import TransactionForm from '../features/transactions/TransactionForm';
 import TransactionList from '../features/transactions/TransactionList';
 
 export default function DashboardPage() {
+    const { t } = useTranslation();
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [transactionList, setTransactionList] = useState<Transaction[]>(
         () => {
@@ -20,7 +22,8 @@ export default function DashboardPage() {
             }
 
             try {
-                const parsedTransactions = JSON.parse(savedTransactions);
+                const parsedTransactions: unknown =
+                    JSON.parse(savedTransactions);
 
                 if (!Array.isArray(parsedTransactions)) {
                     return [];
@@ -54,29 +57,38 @@ export default function DashboardPage() {
         setIsFormOpen(false);
     }
 
+    function handleDeleteTransaction(id: string) {
+        console.log('deleteiiiiiiiing');
+
+        setTransactionList((prev) =>
+            prev.filter((transaction) => transaction.id !== id),
+        );
+    }
+
+    function handleEditTransaction() {
+        //
+    }
+
     useEffect(() => {
         localStorage.setItem('transactions', JSON.stringify(transactionList));
     }, [transactionList]);
 
-    useEffect(() => {
-        localStorage.setItem('transaction', JSON.stringify(transactionList));
-    }, [transactionList]);
-
     return (
-        <main className="min-h-screen bg-slate-50 p-6 pl-10 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+        <main className="min-h-screen bg-slate-50 p-6 md:ps-10 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
             <div className="mx-auto max-w-7xl">
+                {/* Dashboard Header */}
                 <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
                     <div>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
-                            Personal Finance
+                            {t('dashboardPage.personalFinance')}
                         </p>
 
                         <h1 className="mt-1 text-3xl font-bold text-slate-900 dark:text-white">
-                            Financial Dashboard
+                            {t('dashboardPage.title')}
                         </h1>
 
                         <p className="mt-2 text-slate-600 dark:text-slate-400">
-                            Track your income, expenses, and balance.
+                            {t('dashboardPage.description')}
                         </p>
                     </div>
 
@@ -85,31 +97,37 @@ export default function DashboardPage() {
                         onClick={() => setIsFormOpen(true)}
                         className="cursor-pointer rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white shadow-sm transition duration-300 hover:bg-blue-700"
                     >
-                        + Add Transaction
+                        + {t('dashboardPage.addTransaction')}
                     </button>
                 </header>
 
+                {/* Summary Cards */}
                 <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     <SummaryCard
-                        title="Total Income"
+                        title={t('dashboardPage.totalIncome')}
                         amount={income}
                         type="income"
                     />
 
                     <SummaryCard
-                        title="Total Balance"
+                        title={t('dashboardPage.totalBalance')}
                         amount={balance}
                         type="balance"
                     />
 
                     <SummaryCard
-                        title="Total Expenses"
+                        title={t('dashboardPage.totalExpenses')}
                         amount={expenses}
                         type="expenses"
                     />
                 </section>
 
-                <TransactionList transactions={transactionList} />
+                {/* Transactions */}
+                <TransactionList
+                    onDelete={handleDeleteTransaction}
+                    onEdit={handleEditTransaction}
+                    transactions={transactionList}
+                />
 
                 {/* Add Transaction Modal */}
                 <div
@@ -135,9 +153,9 @@ export default function DashboardPage() {
                         <button
                             type="button"
                             onClick={() => setIsFormOpen(false)}
-                            aria-label="Close form"
+                            aria-label={t('dashboardPage.closeForm')}
                             tabIndex={isFormOpen ? 0 : -1}
-                            className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white text-xl text-slate-600 shadow transition hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                            className="absolute inset-e-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white text-xl text-slate-600 shadow transition hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
                         >
                             ×
                         </button>

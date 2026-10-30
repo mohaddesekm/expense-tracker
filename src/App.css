@@ -1,10 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap');
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 body {
   font-family: 'Roboto', sans-serif;
+}
+
+html[lang='en'] body {
+  font-family: 'Roboto', sans-serif;
+}
+
+html[lang='fa'] body {
+  font-family: 'Vazirmatn', sans-serif;
 }
 
 .scrollbar-hide {

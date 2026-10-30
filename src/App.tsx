@@ -37,7 +37,10 @@ export default function App() {
 
             <div className="min-w-0 flex-1">
                 {/* Mobile header */}
-                <header className="flex items-center border-b border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:hidden">
+                <header
+                    dir="ltr"
+                    className="fixed inset-x-0 top-0 z-40 flex items-center border-b border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:hidden"
+                >
                     <button
                         type="button"
                         aria-label="Open navigation menu"
@@ -52,36 +55,42 @@ export default function App() {
                 </header>
 
                 {/* Page content */}
-                <Routes>
-                    <Route path="/" element={<DashboardPage />} />
-                    <Route
-                        path="/transactions"
-                        element={<TransactionsPage />}
-                    />
-                    <Route path="/categories" element={<CategoriesPage />} />
-                    <Route path="/reports" element={<ReportsPage />} />
-                    <Route path="/settings" element={<SettingsPage />} />
-                    <Route
-                        path="*"
-                        element={
-                            <main className="p-6 text-slate-900 dark:text-white flex flex-col items-center">
-                                <h1 className="text-2xl font-bold">
-                                    404 - Page Not Found
-                                </h1>
-                                <p className="mt-2 mb-18 text-slate-500 dark:text-slate-400">
-                                    The page you are looking for does not exist.
-                                </p>
+                <div className="pt-17.5 md:pt-0">
+                    <Routes>
+                        <Route path="/" element={<DashboardPage />} />
+                        <Route
+                            path="/transactions"
+                            element={<TransactionsPage />}
+                        />
+                        <Route
+                            path="/categories"
+                            element={<CategoriesPage />}
+                        />
+                        <Route path="/reports" element={<ReportsPage />} />
+                        <Route path="/settings" element={<SettingsPage />} />
+                        <Route
+                            path="*"
+                            element={
+                                <main className="p-6 text-slate-900 dark:text-white flex flex-col items-center">
+                                    <h1 className="text-2xl font-bold">
+                                        404 - Page Not Found
+                                    </h1>
+                                    <p className="mt-2 mb-18 text-slate-500 dark:text-slate-400">
+                                        The page you are looking for does not
+                                        exist.
+                                    </p>
 
-                                <Link
-                                    to="/"
-                                    className="w-40 text-center cursor-pointer rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white shadow-sm transition duration-300 hover:bg-blue-700"
-                                >
-                                    Dashboard
-                                </Link>
-                            </main>
-                        }
-                    />
-                </Routes>
+                                    <Link
+                                        to="/"
+                                        className="w-40 text-center cursor-pointer rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white shadow-sm transition duration-300 hover:bg-blue-700"
+                                    >
+                                        Dashboard
+                                    </Link>
+                                </main>
+                            }
+                        />
+                    </Routes>
+                </div>
             </div>
         </div>
     );

@@ -13,7 +13,10 @@ import {
     PanelLeftClose,
     PanelLeftOpen,
     X,
+    Languages,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import i18n from '../i18n';
 
 type MenuItem = {
     id: 'dashboard' | 'transactions' | 'categories' | 'reports' | 'settings';
@@ -74,6 +77,8 @@ export default function SideMenu({
         return savedTheme === 'dark';
     });
 
+    const isPersian = i18n.resolvedLanguage?.startsWith('fa') ?? false;
+
     useEffect(() => {
         document.documentElement.classList.toggle('dark', isDark);
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
@@ -82,6 +87,12 @@ export default function SideMenu({
     const handleThemeToggle = () => {
         setIsDard((prev) => !prev);
     };
+
+    const handleLanguageToggle = () => {
+        void i18n.changeLanguage(isPersian ? 'en' : 'fa');
+    };
+
+    const { t } = useTranslation();
 
     return (
         <>
@@ -111,11 +122,11 @@ export default function SideMenu({
                     <div
                         className={`min-w-0 flex-1 ${isCollapsed ? 'md:hidden' : ''}`}
                     >
-                        <h2 className="truncate text-lg font-bold">
+                        <h2 className="truncate text-lg font-bold dark:text-white text-slate-900">
                             Pennywise
                         </h2>
                         <p className="text-xs text-slate-500 dark:text-slate-400">
-                            Manage your money wisely.
+                            {t('tagline')}
                         </p>
                     </div>
 
@@ -123,10 +134,12 @@ export default function SideMenu({
                     <button
                         type="button"
                         aria-label={
-                            isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'
+                            isCollapsed
+                                ? t('expandSidebar')
+                                : t('collapseSidebar')
                         }
                         onClick={onToggleCollapse}
-                        className="hidden md:inline-flex rounded-lg p-2 text-slate-500 transition duration-300 bg-white border-t border-b border-r border-slate-300 dark:border-slate-700 hover:text-slate-900 dark:bg-slate-800 dark:hover:text-white cursor-pointer"
+                        className={`hidden md:inline-flex rounded-lg p-2 text-slate-500 transition duration-300 bg-white border-t border-b ${isPersian ? 'border-l' : 'border-r'} border-slate-300 dark:border-slate-700 hover:text-slate-900 dark:bg-slate-800 dark:hover:text-white cursor-pointer`}
                     >
                         {isCollapsed ? <PanelLeftClose /> : <PanelLeftOpen />}
                     </button>
@@ -134,7 +147,7 @@ export default function SideMenu({
                     {/* Close button: mobile */}
                     <button
                         type="button"
-                        aria-label="Close navigation menu"
+                        aria-label={t('closeMenu')}
                         className="rounded-lg p-2 text-slate-500 transition duration-300 hover:bg-slate-100 dark:hover:bg-slate-800 md:hidden cursor-pointer"
                         onClick={onCloseMobile}
                     >
@@ -144,7 +157,7 @@ export default function SideMenu({
 
                 {/* Navigation */}
                 <nav
-                    aria-label="Main navigation"
+                    aria-label={t('mainNavigation')}
                     className="flex-1 space-y-2 overflow-y-auto scrollbar-hide p-3"
                 >
                     <p
@@ -152,7 +165,7 @@ export default function SideMenu({
                             isCollapsed ? 'hidden' : ''
                         }`}
                     >
-                        Menu
+                        {t('menu')}
                     </p>
 
                     {menuItem.map((item) => {
@@ -177,12 +190,31 @@ export default function SideMenu({
                                 <span
                                     className={isCollapsed ? 'md:hidden' : ''}
                                 >
-                                    {item.label}
+                                    {t(item.id)}
                                 </span>
                             </NavLink>
                         );
                     })}
                 </nav>
+
+                {/* Language toggle */}
+                <div className="border-t border-slate-200 p-3 dark:border-slate-700">
+                    <button
+                        type="button"
+                        title={isCollapsed ? t('changeLanguage') : undefined}
+                        aria-label={t('changeLanguage')}
+                        onClick={handleLanguageToggle}
+                        className={`flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700 ${
+                            isCollapsed ? 'md:justify-center' : ''
+                        }`}
+                    >
+                        <Languages size={21} className="shrink-0" />
+
+                        <span className={isCollapsed ? 'md:hidden' : ''}>
+                            {isPersian ? 'English' : 'فارسی'}
+                        </span>
+                    </button>
+                </div>
 
                 {/* Theme toggle */}
                 <div className="border-t border-slate-200 p-3 dark:border-slate-700">
@@ -190,16 +222,12 @@ export default function SideMenu({
                         type="button"
                         title={
                             isCollapsed
-                                ? isDark
-                                    ? 'Light mode'
-                                    : 'Dark mode'
+                                ? t(isDark ? 'lightMode' : 'darkMode')
                                 : undefined
                         }
-                        aria-label={
-                            isDark
-                                ? 'Switch to light mode'
-                                : 'Switch to dark mode'
-                        }
+                        aria-label={t(
+                            isDark ? 'switchToLightMode' : 'switchToDarkMode',
+                        )}
                         onClick={handleThemeToggle}
                         className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700 cursor-pointer ${
                             isCollapsed ? 'md:justify-center' : ''
@@ -211,7 +239,7 @@ export default function SideMenu({
                             <Moon size={21} className="shrink-0" />
                         )}
                         <span className={isCollapsed ? 'md:hidden' : ''}>
-                            {isDark ? 'Light mode' : 'Dark mode'}
+                            {t(isDark ? 'lightMode' : 'darkMode')}
                         </span>
                     </button>
                 </div>
@@ -228,7 +256,7 @@ export default function SideMenu({
                             className={`min-w-0 flex-1 ${isCollapsed ? 'md:hidden' : ''}`}
                         >
                             <p className="truncate text-sm font-semibold text-slate-800 dark:text-slate-200">
-                                Your Name
+                                {t('yourName')}
                             </p>
                             <p className="truncate text-xs text-slate-500 dark:text-slate-400">
                                 you@example.com
