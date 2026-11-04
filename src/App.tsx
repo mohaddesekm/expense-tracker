@@ -57,17 +57,32 @@ export default function App() {
                 {/* Page content */}
                 <div className="pt-17.5 md:pt-0">
                     <Routes>
-                        <Route path="/" element={<DashboardPage />} />
+                        <Route
+                            path="/"
+                            element={
+                                <DashboardPage isCollapsed={isCollapsed} />
+                            }
+                        />
                         <Route
                             path="/transactions"
-                            element={<TransactionsPage />}
+                            element={
+                                <TransactionsPage isCollapsed={isCollapsed} />
+                            }
                         />
                         <Route
                             path="/categories"
-                            element={<CategoriesPage />}
+                            element={
+                                <CategoriesPage isCollapsed={isCollapsed} />
+                            }
                         />
-                        <Route path="/reports" element={<ReportsPage />} />
-                        <Route path="/settings" element={<SettingsPage />} />
+                        <Route
+                            path="/reports"
+                            element={<ReportsPage isCollapsed={isCollapsed} />}
+                        />
+                        <Route
+                            path="/settings"
+                            element={<SettingsPage isCollapsed={isCollapsed} />}
+                        />
                         <Route
                             path="*"
                             element={

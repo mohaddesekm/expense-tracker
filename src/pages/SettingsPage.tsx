@@ -1,6 +1,12 @@
-export default function SettingsPage() {
+type SettingsPageProps = {
+    isCollapsed: boolean;
+};
+
+export default function SettingsPage({ isCollapsed }: SettingsPageProps) {
     return (
-        <main className="min-h-screen bg-slate-50 p-6 pl-10 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+        <main
+            className={`min-h-screen bg-slate-50 p-6 ${isCollapsed && 'ps-12'} text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100`}
+        >
             <div className="mx-auto max-w-7xl">
                 <header className="mb-8">
                     <h1 className="text-3xl font-bold">Settings</h1>

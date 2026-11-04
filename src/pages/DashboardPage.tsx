@@ -10,7 +10,11 @@ import {
 import TransactionForm from '../features/transactions/TransactionForm';
 import TransactionList from '../features/transactions/TransactionList';
 
-export default function DashboardPage() {
+type DashboardPageProps = {
+    isCollapsed: boolean;
+};
+
+export default function DashboardPage({ isCollapsed }: DashboardPageProps) {
     const { t } = useTranslation();
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [transactionList, setTransactionList] = useState<Transaction[]>(
@@ -89,7 +93,9 @@ export default function DashboardPage() {
     }, [transactionList]);
 
     return (
-        <main className="min-h-screen bg-slate-50 p-6 md:ps-10 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+        <main
+            className={`min-h-screen bg-slate-50 p-6 ${isCollapsed && 'ps-12'} text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100`}
+        >
             <div className="mx-auto max-w-7xl">
                 {/* Dashboard Header */}
                 <header className="mb-8 flex flex-wrap items-center justify-between gap-4">

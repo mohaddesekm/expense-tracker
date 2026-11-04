@@ -4,23 +4,30 @@ import CategoryForm from '../features/categories/CategoryForm';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 
-export default function CategoriesPage() {
+type CategoriesPageProps = {
+    isCollapsed: boolean;
+};
+
+export default function CategoriesPage({ isCollapsed }: CategoriesPageProps) {
     const { categories, addCategory } = useCategories();
     const { t } = useTranslation();
     const [isFormOpen, setIsFormOpen] = useState(false);
 
     return (
-        <main className="min-h-screen bg-slate-50 p-6 pl-10 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
-            <header>
-                <button
-                    onClick={() => setIsFormOpen(true)}
-                    className="rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 transition duration-300 cursor-pointer"
-                >
-                    {t('categoriesPage.addCategory')}
-                </button>
-            </header>
+        <main
+            className={`min-h-screen bg-slate-50 p-6 ${isCollapsed && 'ps-12'} text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100`}
+        >
+            <div className="mx-auto max-w-7xl">
+                <header>
+                    <button
+                        onClick={() => setIsFormOpen(true)}
+                        className="rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 transition duration-300 cursor-pointer"
+                    >
+                        {t('categoriesPage.addCategory')}
+                    </button>
+                </header>
 
-            {/* <div className="mx-auto max-w-7xl">
+                {/* <div className="mx-auto max-w-7xl">
                 <header className="mb-8">
                     <h1 className="text-3xl font-bold">Categories</h1>
                     <p className="mt-2 text-slate-600 dark:text-slate-400">
@@ -35,27 +42,16 @@ export default function CategoriesPage() {
                 </section>
             </div> */}
 
-            {/* <div>
-                {categories.map((category) => {
-                    const Icon = categoryIcons[category.icon];
-                    return (
-                        <div key={category.id}>
-                            <Icon size={20} />
-                            <span>{category.icon}</span>
-                        </div>
-                    );
-                })}
-            </div> */}
-
-            {isFormOpen && (
-                <CategoryForm
-                    onAdd={(category) => {
-                        addCategory(category);
-                        setIsFormOpen(false);
-                    }}
-                    onCancel={() => setIsFormOpen(false)}
-                />
-            )}
+                {isFormOpen && (
+                    <CategoryForm
+                        onAdd={(category) => {
+                            addCategory(category);
+                            setIsFormOpen(false);
+                        }}
+                        onCancel={() => setIsFormOpen(false)}
+                    />
+                )}
+            </div>
         </main>
     );
 }
