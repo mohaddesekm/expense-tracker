@@ -1,7 +1,7 @@
 import type { Transaction } from '../../types';
 import { useTranslation } from 'react-i18next';
 import { EllipsisVertical } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type TransactionListProps = {
     transactions: Transaction[];
@@ -18,6 +18,24 @@ export default function TransactionList({
     const isPersian = i18n.resolvedLanguage?.startsWith('fa') ?? false;
 
     const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                menuRef.current &&
+                !menuRef.current.contains(event.target as Node)
+            ) {
+                setOpenMenuId(null);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         <section
@@ -83,7 +101,10 @@ export default function TransactionList({
                                         </div>
 
                                         {openMenuId === transaction.id && (
-                                            <div className="flex flex-col mt-2 gap-2 absolute -top-8 inset-s-12 dark:bg-slate-900 bg-slate-200 z-90 border rounded-2xl overflow-hidden dark:border-slate-200 border-slate-700">
+                                            <div
+                                                ref={menuRef}
+                                                className="flex flex-col mt-2 gap-2 absolute -top-8 inset-s-12 dark:bg-slate-900 bg-slate-200 z-90 border rounded-2xl overflow-hidden dark:border-slate-200 border-slate-700"
+                                            >
                                                 <button
                                                     type="button"
                                                     onClick={() => {
