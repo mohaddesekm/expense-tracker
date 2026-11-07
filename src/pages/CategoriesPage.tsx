@@ -15,7 +15,7 @@ export default function CategoriesPage({ isCollapsed }: CategoriesPageProps) {
 
     return (
         <main
-            className={`min-h-screen bg-slate-50 p-6 ${isCollapsed && 'ps-12'} text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100`}
+            className={`min-h-screen bg-slate-50 p-6 ${isCollapsed ? 'ps-12' : ''} text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100`}
         >
             <div className="mx-auto max-w-7xl">
                 <header>
@@ -23,7 +23,7 @@ export default function CategoriesPage({ isCollapsed }: CategoriesPageProps) {
                         onClick={() => setIsFormOpen(true)}
                         className="rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 transition duration-300 cursor-pointer"
                     >
-                        {t('categoriesPage.addCategory')}
+                        + {t('categoriesPage.addCategory')}
                     </button>
                 </header>
 
@@ -43,13 +43,30 @@ export default function CategoriesPage({ isCollapsed }: CategoriesPageProps) {
             </div> */}
 
                 {isFormOpen && (
-                    <CategoryForm
-                        onAdd={(category) => {
-                            addCategory(category);
-                            setIsFormOpen(false);
+                    <div
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+                        onMouseDown={(event) => {
+                            if (event.target === event.currentTarget) {
+                                setIsFormOpen(false);
+                            }
                         }}
-                        onCancel={() => setIsFormOpen(false)}
-                    />
+                    >
+                        <div>
+                            <div>
+                                <h2></h2>
+
+                                <button>×</button>
+                            </div>
+
+                            <CategoryForm
+                                onAdd={(category) => {
+                                    addCategory(category);
+                                    setIsFormOpen(false);
+                                }}
+                                onCancel={() => setIsFormOpen(false)}
+                            />
+                        </div>
+                    </div>
                 )}
             </div>
         </main>

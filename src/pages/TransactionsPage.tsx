@@ -7,7 +7,7 @@ export default function TransactionsPage({
 }: TransactionsPageProps) {
     return (
         <main
-            className={`min-h-screen bg-slate-50 p-6 ${isCollapsed && 'ps-12'} text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100`}
+            className={`min-h-screen bg-slate-50 p-6 ${isCollapsed ? 'ps-12' : ''} text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100`}
         >
             <div className="mx-auto max-w-7xl">
                 <header className="mb-8">
